@@ -1,0 +1,35 @@
+In a relational database, a self join is a type of join operation where a table is joined with itself. It involves relating rows within the same table based on a common column. Self joins are useful when you need to establish relationships between different rows in the same table, such as finding related records or hierarchical relationships.
+
+To perform a self join, you need to use table aliases to differentiate between the two instances of the same table. Each instance of the table is given a unique alias, and then a join condition is defined to match the related rows.
+
+Here's a basic example of a self join:
+
+Consider a table named "Employees" with the following columns:
+
+| employee_id | employee_name | manager_id |
+|-------------|---------------|------------|
+| 1           | John          | NULL       |
+| 2           | Alice         | 1          |
+| 3           | Bob           | 1          |
+| 4           | Carol         | 2          |
+
+In this scenario, the "manager_id" column indicates the employee's manager, where the value is a reference to the "employee_id" of another employee. To find the name of each employee's manager, we can use a self join:
+
+```sql
+SELECT e1.employee_name AS employee_name, e2.employee_name AS manager_name
+FROM Employees e1
+LEFT JOIN Employees e2 ON e1.manager_id = e2.employee_id;
+```
+
+The above query uses table aliases "e1" and "e2" to represent two different instances of the "Employees" table. It joins the table on the "manager_id" column of "e1" with the "employee_id" column of "e2," effectively linking each employee to their respective manager. The result will be:
+
+| employee_name | manager_name |
+|---------------|--------------|
+| John          | NULL         |
+| Alice         | John         |
+| Bob           | John         |
+| Carol         | Alice        |
+
+As shown in the result, the self join helps us identify the name of each employee's manager based on the "manager_id" reference in the same table.
+
+Self joins can be used in various scenarios, such as modeling hierarchical data, organizing parent-child relationships within the same table, or finding related records based on specific criteria. They are a powerful tool for querying and analyzing data when certain relationships exist within a single table.
